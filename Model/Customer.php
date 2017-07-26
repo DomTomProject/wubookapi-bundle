@@ -2,8 +2,12 @@
 
 namespace Kamwoz\WubookAPIBundle\Model;
 
+use DomTomProject\EasyRestBundle\Traits\FillableEntityTrait;
+
 class Customer {
-    
+
+	use FillableEntityTrait;
+
     private $firstName;
     private $surname;
     private $email;

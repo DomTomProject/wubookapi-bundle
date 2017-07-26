@@ -7,6 +7,7 @@ use Kamwoz\WubookAPIBundle\Model\ReservationInterface;
 use DateTime;
 use Reflection;
 use LogicException;
+use ReflectionClass;
 
 class BookingHandler extends BaseHandler {
 
@@ -58,21 +59,23 @@ class BookingHandler extends BaseHandler {
      * @return null
      * @throws WubookException
      */
-    public function fetchBooking(ReservationInterface $reservation) {
-        $res = parent::defaultRequestHandler('fetch_booking', [$reservation->getReservationCode(), $reservation->getAncillary()]);
-
-        $reflection = new ReflectionClass($this->model);
-        if (!$reflection->implementsInterface(ReservationInterface::class)) {
-            throw new LogicException('Reservation model must implements ' . ReservationInterface::class);
-        }
-        
-        $data = $res[0];
-        if (!empty($data)) {
-            $data = $this->model->createFromData($data);
-        }
-
-        return $data;
+    public function fetchBooking(int $reservationId, int $ancillary = 0) {
+//        $res = parent::defaultRequestHandler('fetch_booking', [$reservationId, $ancillary]);
+//
+//        $reflection = new ReflectionClass($this->model);
+//        if (!$reflection->implementsInterface(ReservationInterface::class)) {
+//            throw new LogicException('Reservation model must implements ' . ReservationInterface::class);
+//        }
+//
+//        $data = $res[0];
+//        if (!empty($data)) {
+//            $data = $this->model->createFromData($data);
+//        }
+//
+//        return $data;
+	    return parent::defaultRequestHandler('fetch_booking', [$reservationId, $ancillary]);
     }
+
 
     /**
      * @param ReservationInterface $reservation
@@ -80,23 +83,19 @@ class BookingHandler extends BaseHandler {
      * @throws WubookException
      */
     public function newReservation(ReservationInterface $reservation): string {
-        $args = func_get_args();
-        $args[0] = $args[0]->format('d/m/Y');
-        $args[1] = $args[1]->format('d/m/Y');
-        $args[4] = strval($args[4]);
 
         return parent::defaultRequestHandler('new_reservation', [
-                    $reservation->getFrom()->format('d/m/Y'),
-                    $reservation->getTo()->format('d/y/Y'),
-                    $reservation->getRooms(),
-                    $reservation->getCustomer()->generateDataArray(),
-                    (string) $reservation->getAmount(),
-                    $reservation->getOrigin(),
-                    $reservation->getCcard(),
-                    $reservation->getAncillary(),
+			        $reservation->getDateFrom()->format('d/m/Y'),
+			        $reservation->getDateTo()->format('d/m/Y'),
+	                $reservation->getRooms(),
+					$reservation->getCustomer()->generateDataArray(),
+                    $reservation->getAmount(),
+			        $reservation->getOrigin(),
+	                $reservation->getCcard(),
+			        $reservation->getAncillary(),
                     $reservation->getGuests(),
-                    $reservation->getIgnoreRestriction(),
-                    $reservation->getIgnoreAvailability()
+			        $reservation->getIgnoreRestriction(),
+			        $reservation->getIgnoreAvailability()
         ]);
     }
 

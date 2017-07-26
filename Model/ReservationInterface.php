@@ -14,13 +14,13 @@ interface ReservationInterface {
     
     public function setRooms(array $rooms);
     
-    public function getFrom(): ?DateTime;
+    public function getDateFrom(): ?DateTime;
 
-    public function setFrom(DateTime $from);
+    public function setDateFrom(DateTime $from);
 
-    public function getTo(): ?DateTime;
+    public function getDateTo(): ?DateTime;
 
-    public function setTo(DateTime $from);
+    public function setDateTo(DateTime $from);
 
     public function getCustomer(): ?Customer;
 

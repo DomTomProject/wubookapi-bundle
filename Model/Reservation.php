@@ -3,13 +3,16 @@
 namespace Kamwoz\WubookAPIBundle\Model;
 
 use DateTime;
+use DomTomProject\EasyRestBundle\Traits\FillableEntityTrait;
 
 class Reservation implements ReservationInterface {
 
+	use FillableEntityTrait;
+
     private $amount;
     private $customer;
-    private $from;
-    private $to;
+    private $dateFrom;
+    private $dateTo;
     private $guests;
     private $reservationCode;
     private $origin;
@@ -36,20 +39,20 @@ class Reservation implements ReservationInterface {
         return $this->customer;
     }
 
-    public function getFrom(): ?DateTime {
-        return $this->from;
+    public function getDateFrom(): ?DateTime {
+        return $this->dateFrom;
     }
 
     public function getGuests(): ?array {
-        return $this->getGuests();
+        return $this->guests;
     }
 
     public function getReservationCode(): ?int {
         return $this->reservationCode;
     }
 
-    public function getTo(): ?DateTime {
-        return $this->to;
+    public function getDateTo(): ?DateTime {
+        return $this->dateTo;
     }
 
     public function setAmount(int $amount) {
@@ -62,8 +65,8 @@ class Reservation implements ReservationInterface {
         return $this;
     }
 
-    public function setFrom(DateTime $from) {
-        $this->from = $from;
+    public function setDateFrom(DateTime $dateFrom) {
+        $this->dateFrom = $dateFrom;
         return $this;
     }
 
@@ -77,8 +80,8 @@ class Reservation implements ReservationInterface {
         return $this;
     }
 
-    public function setTo(DateTime $from) {
-        $this->to = $from;
+    public function setDateTo(DateTime $from) {
+        $this->dateTo = $from;
         return $this;
     }
 
