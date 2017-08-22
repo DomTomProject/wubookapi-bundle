@@ -27,7 +27,8 @@ class WubookAPIExtension extends Extension
         
         //models classes
         $container->setParameter('wubook_api.room_model', $config['room_model']);
-        $container->setParameter('wubook_api.reservation_model', $config['reservation_model']);
+	    $container->setParameter('wubook_api.availability_model', $config['availability_model']);
+	    $container->setParameter('wubook_api.reservation_model', $config['reservation_model']);
 
         //done this way to avoid circular reference
         $clientDefinition = $container->getDefinition('wubook_api.client');

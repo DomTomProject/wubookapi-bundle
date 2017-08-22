@@ -2,6 +2,9 @@
 
 namespace Kamwoz\WubookAPIBundle\DependencyInjection;
 
+use Kamwoz\WubookAPIBundle\Model\Availability;
+use Kamwoz\WubookAPIBundle\Model\Reservation;
+use Kamwoz\WubookAPIBundle\Model\Room;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,9 +16,21 @@ class Configuration implements ConfigurationInterface {
 
         $rootNode
                 ->children()
-                ->scalarNode('room_model')->defaultValue('Kamwoz\WubookAPIBundle\Model\Room')->cannotBeEmpty()->end()
-                ->scalarNode('reservation_model')->defaultValue('Kamwoz\WubookAPIBundle\Model\Reservation')->cannotBeEmpty()->end()
-                ->scalarNode('url')->defaultValue('https://wubook.net/xrws/')->end()
+			        ->scalarNode('room_model')
+				        ->defaultValue(Room::class)
+				        ->cannotBeEmpty()
+			        ->end()
+			        ->scalarNode('availability_model')
+				        ->defaultValue(Availability::class)
+				        ->cannotBeEmpty()
+			        ->end()
+	                ->scalarNode('reservation_model')
+		                ->defaultValue(Reservation::class)
+		                ->cannotBeEmpty()
+	                ->end()
+	                ->scalarNode('url')
+	                    ->defaultValue('https://wubook.net/xrws/')
+	                ->end()
                 ->end()
         ;
 

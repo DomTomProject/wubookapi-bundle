@@ -3,10 +3,22 @@
 namespace Kamwoz\WubookAPIBundle\Handler;
 
 use Kamwoz\WubookAPIBundle\Exception\WubookException;
+use Kamwoz\WubookAPIBundle\Model\Availability;
+use Kamwoz\WubookAPIBundle\Model\AvailabilityInterface;
+use LogicException;
+use ReflectionClass;
 
 class AvailabilityHandler extends BaseHandler
 {
-    /**
+
+	private $availabilityModel;
+
+	public function __construct(string $availabilityModel) {
+		$this->availabilityModel = $availabilityModel;
+	}
+
+
+	/**
      * Fetch availability
      *
      * @param \DateTime $dateFrom
@@ -16,15 +28,33 @@ class AvailabilityHandler extends BaseHandler
      * @return array|null
      * @throws WubookException
      */
-    public function fetchRoomValues(\DateTime $dateFrom, \DateTime $dateTo, $rooms = array())
-    {
-        $args = [
-            $dateFrom->format('d/m/Y'),
-            $dateTo->format('d/m/Y'),
-            $rooms
-        ];
+    public function fetchRoomValues(\DateTime $dateFrom, \DateTime $dateTo, $rooms = array()) :? array {
 
-        return parent::defaultRequestHandler('fetch_rooms_values', $args);
+    	$availabilityReflection = new ReflectionClass($this->availabilityModel);
+
+    	if (!$availabilityReflection->implementsInterface(AvailabilityInterface::class)) {
+		    throw new LogicException('Availability model must implements ' . AvailabilityInterface::class);
+	    }
+
+	    $args = [
+		    $dateFrom->format('d/m/Y'),
+		    $dateTo->format('d/m/Y'),
+		    $rooms
+	    ];
+
+	    $fetchedRoomsVaules = parent::defaultRequestHandler('fetch_rooms_values', $args);
+
+	    if (empty($fetchedRoomsVaules)) {
+	    	return [];
+	    }
+
+	    foreach ($fetchedRoomsVaules as $roomId => &$roomAvailabilities) {
+	    	foreach ($roomAvailabilities as &$roomAvailability) {
+			    $roomAvailability = $this->availabilityModel::createFromData($roomAvailability);
+		    }
+	    }
+
+        return $fetchedRoomsVaules;
     }
 
     /**
