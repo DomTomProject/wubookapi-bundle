@@ -106,8 +106,8 @@ class BookingHandler extends BaseHandler {
      * @return bool false on success and exception on failure
      * @throws WubookException
      */
-    public function cancelReservation(ReservationInterface $reservation) {
-        parent::defaultRequestHandler('cancel_reservation', [$reservation->getReservationCode()]);
+    public function cancelReservation(int $reservationCode) {
+        parent::defaultRequestHandler('cancel_reservation', [$reservationCode]);
 
         return false;
     }
